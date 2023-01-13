@@ -49,17 +49,14 @@ $(function() {
                 //trying to get to the next page of data
                 changeApi();
                 function changeApi() {
-                    console.log(data)
-                    console.log(data.next)
-                    API_ADDRESS = data.next
-                    console.log(API_ADDRESS)
-
                     //it gets stuck on the second page and creates a infinite loop 
                     //while(data.next != null) {    
+                        API_ADDRESS = data.next
+                        console.log(API_ADDRESS)
                         fetch(API_ADDRESS)
                         .then((response) => response.json())
                         .then((data) => {
-                            console.log(data.next)
+                            return data.next;
                         })
                     }
                 }
