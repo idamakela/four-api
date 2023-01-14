@@ -47,18 +47,29 @@ $(function() {
                 }
 
                 //trying to get to the next page of data
+                //IDEA: just search the data and return the results from the input and randomize that to generate a spell. the returned data prob need to be in an array and randomize a spell from that array.
                 changeApi();
                 function changeApi() {
                     //it gets stuck on the second page and creates a infinite loop 
-                    //while(data.next != null) {    
+                    //something wrong with the fetch, prob cus its async, need it to wait for the response then call the functions
+                    let iii = 0;
+                    while(iii < 18) {    
                         API_ADDRESS = data.next
                         console.log(API_ADDRESS)
                         fetch(API_ADDRESS)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            return data.next;
-                        })
+                            .then(response => response.json())
+                            .then(data => console.log(data.next))
+                        iii++;
                     }
+                    
+                    //this gets all the api addresses but they are not in order
+                    // for (let ii = 2; ii < 18; ii++) {
+                    //     let newApi = API_ADDRESS + "/?page=" + ii;
+                    //     fetch(newApi)
+                    //         .then(response =>   response.json())
+                    //         .then(data     =>   console.log(data.next) );
+                    // }
+
                 }
 
 
