@@ -48,6 +48,7 @@ $(function() {
 
                 //trying to get to the next page of data
                 //IDEA: just search the data and return the results from the input and randomize that to generate a spell. the returned data prob need to be in an array and randomize a spell from that array.
+                //ERROR: the data doesnt have a url connected to each and every spell
                 changeApi();
                 function changeApi() {
                     //it gets stuck on the second page and creates a infinite loop 
