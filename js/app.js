@@ -1,5 +1,5 @@
 $(function() {
-    let API_ADDRESS = "https://api.open5e.com/spells";
+    const API_ADDRESS = "https://api.open5e.com/spells";
     //max pages: /?page=17
 
     $("button").on("click", generateSpell);
@@ -20,7 +20,7 @@ $(function() {
             })
             .then((data) => {
                 
-                //class testing filter
+                //ONE: class testing filter
                 let splitClassString = data.results[5].dnd_class.toLowerCase().split(", ")
 
                 if(splitClassString.includes(selectedClass)) {
@@ -29,40 +29,29 @@ $(function() {
                     //result when else
                 }
 
-                //trying to access data.reslults[i] and add it to a new array, and then go to data.next and append that data.results[i] to the same array
-                //aka i want to iterate through an array of objects, add the objects to a new array, and do the same on the next api page (data.next)
                 
-                //code to push the object data to a new array
+                //TWO: code to push the object data to a new array
                 let spellArr = [];
-                //createSpellArr();
-                //console.log(spellArr)
                 function createSpellArr() {
-                    console.log(data.results)
-                    console.log(data.results[0])
-
-                    //get the objects and place them in a new array
                     for(i = 0; i <= data.results.length - 1; i++) {
                         spellArr.push(data.results[i])
                     }
                 }
 
-                //trying to get to the next page of data
-                changeApi();
-                function changeApi() {
-                    //it gets stuck on the second page and creates a infinite loop 
-                    while(data.next != null) {
-                        API_ADDRESS = data.next
-                        console.log(API_ADDRESS)
-                        fetch(API_ADDRESS)
-                        .then((response) => response.json())
-                        .then((data) => {
-                            //function to add all data.results[i] to spellsArr
-                            API_ADDRESS = data.next
-                            console.log(data.next)
+                //THREE: get the other api address
+                getNextApi();
+                function getNextApi() {
+                    for(i = 2; i <= 17; i++) {
+                        let newApi = API_ADDRESS + "/?=page" + i;
 
-                        })
+                        console.log(newApi);
+                        fetch(newApi)
+                            .then(response => response.json())
+                            .then(data => console.log(data));
                     }
                 }
+
+                
 
 
 
