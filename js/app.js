@@ -50,13 +50,16 @@ $(function() {
                 changeApi();
                 function changeApi() {
                     //it gets stuck on the second page and creates a infinite loop 
-                    //while(data.next != null) {    
+                    while(data.next != null) {
                         API_ADDRESS = data.next
                         console.log(API_ADDRESS)
                         fetch(API_ADDRESS)
                         .then((response) => response.json())
                         .then((data) => {
-                            return data.next;
+                            //function to add all data.results[i] to spellsArr
+                            API_ADDRESS = data.next
+                            console.log(data.next)
+
                         })
                     }
                 }
