@@ -2,9 +2,34 @@ $(function() {
     const API_ADDRESS = "https://api.open5e.com/spells";
     //max pages: /?page=17
 
-    $("button").on("click", generateSpell);
+    //$("button").on("click", generateSpell);
 
-    generateSpell();
+    //generateSpell();
+
+    //THREE: get the other api address
+    let apiArray = [];
+    getNextApi();
+
+    //ERRORS
+    function getNextApi() {
+        apiArray.push(API_ADDRESS)
+        
+        fetch(API_ADDRESS)
+        .then(response => response.json())
+        .then(data => {
+            for(i = 2; i <= 17; i++) {
+                let newApi = data.next;
+    
+                fetch(newApi)
+                .then(response  => response.json())
+                .then(data      => {
+                    apiArray.push(data.next)
+                })
+            }
+
+            console.log(apiArray)
+        })   
+    }
 
     function generateSpell() {
         let selectedClass = $("#class").val();
@@ -38,17 +63,20 @@ $(function() {
                     }
                 }
 
-                //THREE: get the other api address
-                getNextApi();
-                function getNextApi() {
-                    for(i = 2; i <= 17; i++) {
-                        let newApi = API_ADDRESS + "/?=page" + i;
 
-                        console.log(newApi);
-                        fetch(newApi)
-                            .then(response => response.json())
-                            .then(data => console.log(data));
-                    }
+
+                //THREE FETCH TEST 
+                /*
+                1. fetch /spells 
+                2. await response
+                */
+                async function fetchMetaData() {
+                    let response = await fetch(API_ADDRESS);
+                    let responses = await Promise.all(
+                        Array.from(
+                            Array(resp.data.next),
+                        )
+                    )
                 }
 
                 
@@ -73,31 +101,4 @@ $(function() {
 
             })
     }
-
-    function randomizeSpell() {
-        fetch(API_ADDRESS)
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.results.dnd_class.include() && data.results.level_int.include(level)) {
-                    data.results.forEach(element => {
-                        return data.results[Math.floor(Math.random() * data.results.length)];
-                    });
-                } else {
-                    API_ADDRESS = data.next;
-                }
-
-
-                let levelFilter = data.results.level_int.filter(filterLevel);
-                let classFilter = data.results.dnd_class.toLowerCase().includes(selectedClass)
-
-                function filterLevel(level) {
-                    return level = selectedLevel;
-                }
-
-            })
-
-
-
-    }
-
 });

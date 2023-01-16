@@ -1,8 +1,20 @@
 $(function() {
+    //missing VG criterias 
+
     const API_ADDRESS = "https://www.dnd5eapi.co";
 
-    //onclick function, missing a reload function. Data is just added on every click
-    $(".start").on("click", castSpell);
+    $(".restart").hide()
+
+    $(".start").click(function() {
+        $(".start").hide();
+        $(".restart").show();
+        castSpell();
+    });
+
+    $(".restart").click(function() {
+        $(".box").empty();
+        castSpell();
+    });
 
     function castSpell() {
         fetch(API_ADDRESS + "/api/spells/")
@@ -17,16 +29,16 @@ $(function() {
                 let spellsComponents = [];
                 let spellsDesc = [];
     
-                for(i = 0; i <= data.classes.length - 1; i++) {
-                    spellsClass.push(data.classes[i].name) 
+                for(let x = 0; x <= data.classes.length - 1; x++) {
+                    spellsClass.push(data.classes[x].name) 
                 }
     
-                for(i = 0; i <= data.components.length - 1; i++) {
-                    spellsComponents.push(data.components[i]) 
+                for(let y = 0; y <= data.components.length - 1; y++) {
+                    spellsComponents.push(data.components[y]) 
                 }
             
-                for(i = 0; i <= data.desc.length - 1; i++) {
-                    spellsDesc.push(data.desc[i]) 
+                for(let z = 0; z <= data.desc.length - 1; z++) {
+                    spellsDesc.push(data.desc[z]) 
                 }
                 
                 $(".name").text(data.name);
