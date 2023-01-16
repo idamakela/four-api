@@ -90,6 +90,10 @@ button:hover {
     margin: 4% 0 4% 0;
 }
 
+div.zero {
+    margin: 0 0 4% 0;;
+}
+
 footer {
     padding: 4%;
     font-size: 1.2rem;
