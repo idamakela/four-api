@@ -1,104 +1,72 @@
 $(function() {
-    const API_ADDRESS = "https://api.open5e.com/spells";
-    //max pages: /?page=17
+    //missing VG criterias 
 
-    //$("button").on("click", generateSpell);
+    const API_ADDRESS = "https://www.dnd5eapi.co";
 
-    //generateSpell();
+    $(".restart").hide()
 
-    //THREE: get the other api address
-    let apiArray = [];
-    getNextApi();
+    $(".start").click(function() {
+        $(".start").hide();
+        $(".restart").show();
+        castSpell();
+    });
 
-    //ERRORS
-    function getNextApi() {
-        apiArray.push(API_ADDRESS)
-        
-        fetch(API_ADDRESS)
+    $(".restart").click(function() {
+        $(".box").empty();
+        castSpell();
+    });
+
+    function castSpell() {
+        fetch(API_ADDRESS + "/api/spells/")
         .then(response => response.json())
         .then(data => {
-            for(i = 2; i <= 17; i++) {
-                let newApi = data.next;
+            let randomSpell = generateRandomSpell(data.results);
     
-                fetch(newApi)
-                .then(response  => response.json())
-                .then(data      => {
-                    apiArray.push(data.next)
-                })
-            }
-
-            console.log(apiArray)
-        })   
+            fetch(API_ADDRESS + randomSpell.url)
+            .then(response => response.json())
+            .then(data => {
+                let spellsClass = [];
+                let spellsComponents = [];
+                let spellsDesc = [];
+    
+                for(let x = 0; x <= data.classes.length - 1; x++) {
+                    spellsClass.push(data.classes[x].name) 
+                }
+    
+                for(let y = 0; y <= data.components.length - 1; y++) {
+                    spellsComponents.push(data.components[y]) 
+                }
+            
+                for(let z = 0; z <= data.desc.length - 1; z++) {
+                    spellsDesc.push(data.desc[z]) 
+                }
+                
+                $(".name").text(data.name);
+    
+                if(data.ritual == true && data.concentration == true) {
+                    $(".zero").append("<p><i>Ritual spell</i> | <i>Concentration spell</i></p>")
+                } else if(data.ritual == true) {
+                    $(".zero").append("<p><i>Ritual spell</i></p>")
+                } else if(data.concentration == true) {
+                    $(".zero").append("<p><i>Concentration spell</i></p>")
+                }
+    
+                $(".first").append("<p>Level " + data.level + " " +  data.school.name  + " | " + spellsClass.join(", ") + "</p>");
+                $(".second").append("<p><b>Range: </b>" + data.range + "</p>");
+                $(".second").append("<p><b>Casting time: </b>" + data.casting_time + "</p>");
+                $(".second").append("<p><b>Duration: </b>" + data.duration + "</p>");
+                $(".second").append("<p><b>Components: </b>" + spellsComponents.join(", ") + "</p>");
+    
+                if(data.material != undefined) {
+                    $(".second").append("<p><b>Materials: </b>" + data.material + "</p>");
+                } 
+    
+                $(".third").append($("<p>" + spellsDesc.join("<br><br>") + "</p>"));
+            });
+        });
     }
 
-    function generateSpell() {
-        let selectedClass = $("#class").val();
-        let selectedLevel = $("#level").val();
-
-        fetch(API_ADDRESS)
-            .then((response) => {
-                if(!response.ok) {
-                    throw new Error(response.status);
-                } else {
-                    return response.json();
-                }
-            })
-            .then((data) => {
-                
-                //ONE: class testing filter
-                let splitClassString = data.results[5].dnd_class.toLowerCase().split(", ")
-
-                if(splitClassString.includes(selectedClass)) {
-                    //result when it includes
-                } else {
-                    //result when else
-                }
-
-                
-                //TWO: code to push the object data to a new array
-                let spellArr = [];
-                function createSpellArr() {
-                    for(i = 0; i <= data.results.length - 1; i++) {
-                        spellArr.push(data.results[i])
-                    }
-                }
-
-
-
-                //THREE FETCH TEST 
-                /*
-                1. fetch /spells 
-                2. await response
-                */
-                async function fetchMetaData() {
-                    let response = await fetch(API_ADDRESS);
-                    let responses = await Promise.all(
-                        Array.from(
-                            Array(resp.data.next),
-                        )
-                    )
-                }
-
-                
-
-
-
-
-                //access correct data and append to html
-                $(".name").text(data.results[5].name);
-                $(".first").append("<p>" + data.results[5].level + " " +  data.results[5].school  + " | " + data.results[5].dnd_class + "</p>");
-
-
-                $(".second").append("<p><b>Range: </b>" + data.results[5].range + "</p>");
-                $(".second").append("<p><b>Casting time: </b>" + data.results[5].casting_time + "</p>");
-                $(".second").append("<p><b>Ritual: </b>" + data.results[5].ritual + "</p>");
-                $(".second").append("<p><b>Concentration: </b>" + data.results[5].concentration + "</p>");
-                $(".second").append("<p><b>Duration: </b>" + data.results[5].duration + "</p>");
-                $(".second").append("<p><b>Components: </b>" + data.results[5].components + "</p>");
-                $(".second").append("<p><b>Materials: </b>" + data.results[5].material + "</p>");
-
-                $(".third").append($("<p>").text(data.results[5].desc));
-
-            })
+    function generateRandomSpell(targetArray) {
+        return targetArray[Math.floor(Math.random() * targetArray.length)];
     }
 });
