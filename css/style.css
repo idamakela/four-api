@@ -4,21 +4,12 @@
     --accent-color: #264C5E;
     --light-accent-color: #bbc8cf;
 
-    --bard: #AB6DAC;
-    --cleric: #91A1B2;
-    --druid: #7A853B;
-    --paladin: #B59E54;
-    --sorcerer: #992E2E;
-    --wizard: #2A50A1;
-    --warlock: #7B469B;
-
     font-size: 16px;
 }
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
+    margin: 0;
 }
 
 html {
@@ -26,51 +17,51 @@ html {
 }
 
 body {
-    height: 100%;
     display: flex;
     flex-direction: column;
     font-family: monospace;
+    height: 100%;
 }
 
 header {
-    padding: 8%;
-    text-align: center;
-    font-size: 2.488rem;
     background-color: var(--second-color);
     color: var(--main-color);
-    margin-bottom: 10%;
+    font-size: 2.488rem;
+    padding: 8%;
+    text-align: center;
 }
 
 main {
-    flex-grow: 1;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
 }
 
 .search-field {
-    margin: 4%;
     font-size: 1.2rem;
+    margin: 4%;
 }
 
 .search-field option,
 .search-field select {
-    font-family: monospace;
-    text-transform: capitalize;
-    font-size: 1.2rem;
     cursor: pointer;
+    font-family: monospace;
+    font-size: 1.2rem;
+    text-transform: capitalize;
 }
 
 button {
-    padding: 4%;
-    font-size: 1.728rem;
-    border: none;
-    border-radius: 2rem;
-    text-transform: capitalize;
-    font-family: monospace;
-    margin: 8%;
-    cursor: pointer;
     background-color: var(--light-accent-color);
+    border-radius: 4rem;
+    border: none;
+    cursor: pointer;
+    font-family: monospace;
+    font-size: 1.728rem;
+    margin: 8%;
+    padding: 1em 2em 1em 2em;
+    text-transform: capitalize;
 }
 
 button:hover {
@@ -79,7 +70,8 @@ button:hover {
 }
 
 .spell-result {
-    margin: 8% 4% 20% 4%;
+    margin: 6% 4% 0 4%;
+    max-width: 558px;
 }
 
 .spell-result p {
@@ -91,7 +83,25 @@ button:hover {
 }
 
 footer {
-    padding: 4%;
-    font-size: 1.2rem;
     background-color: var(--light-accent-color);
+    font-size: 1.2rem;
+    padding: 4%;
+}
+
+@media screen and (min-width: 991px) {
+    header {
+        padding: 4%;
+    }
+
+    .spell-result {
+        margin: 4% 4% 0% 4%;
+    }
+    
+    .box {
+        margin: 2% 0 2% 0;
+    }
+
+    footer {
+        padding: 2%;
+    }
 }
