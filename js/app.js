@@ -20,12 +20,24 @@ $(function() {
 
     function castSpell() {
         fetch(API_ADDRESS + "/api/spells/")
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                throw new Error(response.status);
+            } else {
+                return response.json();
+            }
+        })
         .then(data => {
             let randomSpell = generateRandomSpell(data.results);
     
             fetch(API_ADDRESS + randomSpell.url)
-            .then(response => response.json())
+            .then(response => {
+                if(!response.ok) {
+                    throw new Error(response.status);
+                } else {
+                    return response.json();
+                }
+            })
             .then(data => {
                 let spellsClass = [];
                 let spellsComponents = [];
@@ -47,11 +59,11 @@ $(function() {
                 $(".first").append("<p>Level " + data.level + " " +  data.school.name  + " | " + spellsClass.join(", ") + "</p>");
     
                 if(data.ritual == true && data.concentration == true) {
-                    $(".first").append("<p><i>Ritual spell</i> | <i>Concentration spell</i></p>")
+                    $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>")
                 } else if(data.ritual == true) {
-                    $(".first").append("<p><i>Ritual spell</i></p>")
+                    $(".second").append("<p><b>Ritual spell</b></p>")
                 } else if(data.concentration == true) {
-                    $(".first").append("<p><i>Concentration spell</i></p>")
+                    $(".second").append("<p><b>Concentration spell</b></p>")
                 }
     
                 $(".second").append("<p><b>Range: </b>" + data.range + "</p>");
@@ -64,8 +76,14 @@ $(function() {
                 } 
     
                 $(".third").append($("<p>" + spellsDesc.join("<br><br>") + "</p>"));
-            });
-        });
+            })
+            .catch(error => {
+                $("main").append($("<h2>Something went wrong: " + error + "</h2>"))
+            })
+        })
+        .catch(error => {
+            $("main").append($("<h2>Something went wrong: " + error + "</h2>"))
+        })
     }
 
     function generateRandomSpell(targetArray) {

@@ -93,15 +93,15 @@ footer {
         padding: 4%;
     }
 
-    footer {
-        padding: 2%;
-    }
-
     .spell-result {
         margin: 4% 4% 0% 4%;
     }
-
+    
     .box {
         margin: 2% 0 2% 0;
+    }
+
+    footer {
+        padding: 2%;
     }
 }
