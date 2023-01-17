@@ -3,8 +3,8 @@ $(function() {
 
     const API_ADDRESS = "https://www.dnd5eapi.co";
 
-    $(".restart").hide()
-    $(".spell-result").hide()
+    $(".restart").hide();
+    $(".spell-result").hide();
 
     $(".start").click(function() {
         $(".start").hide();
@@ -44,26 +44,26 @@ $(function() {
                 let spellsDesc = [];
     
                 for(let x = 0; x <= data.classes.length - 1; x++) {
-                    spellsClass.push(data.classes[x].name) 
+                    spellsClass.push(data.classes[x].name);
                 }
     
                 for(let y = 0; y <= data.components.length - 1; y++) {
-                    spellsComponents.push(data.components[y]) 
+                    spellsComponents.push(data.components[y]);
                 }
             
                 for(let z = 0; z <= data.desc.length - 1; z++) {
-                    spellsDesc.push(data.desc[z]) 
+                    spellsDesc.push(data.desc[z]);
                 }
                 
                 $(".name").text(data.name);
                 $(".first").append("<p>Level " + data.level + " " +  data.school.name  + " | " + spellsClass.join(", ") + "</p>");
     
                 if(data.ritual == true && data.concentration == true) {
-                    $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>")
+                    $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>");
                 } else if(data.ritual == true) {
-                    $(".second").append("<p><b>Ritual spell</b></p>")
+                    $(".second").append("<p><b>Ritual spell</b></p>");
                 } else if(data.concentration == true) {
-                    $(".second").append("<p><b>Concentration spell</b></p>")
+                    $(".second").append("<p><b>Concentration spell</b></p>");
                 }
     
                 $(".second").append("<p><b>Range: </b>" + data.range + "</p>");
@@ -78,11 +78,11 @@ $(function() {
                 $(".third").append($("<p>" + spellsDesc.join("<br><br>") + "</p>"));
             })
             .catch(error => {
-                $("main").append($("<h2>Something went wrong: " + error + "</h2>"))
+                $("main").append($("<h2>Something went wrong: " + error + "</h2>"));
             })
         })
         .catch(error => {
-            $("main").append($("<h2>Something went wrong: " + error + "</h2>"))
+            $("main").append($("<h2>Something went wrong: " + error + "</h2>"));
         })
     }
 
