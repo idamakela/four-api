@@ -20,25 +20,25 @@ $(function() {
 
     function castSpell() {
         fetch(API_ADDRESS + "/api/spells/")
-        .then(response => {
+        .then((response) => {
             if(!response.ok) {
                 throw new Error(response.status);
             } else {
                 return response.json();
             }
         })
-        .then(data => {
+        .then((data) => {
             let randomSpell = generateRandomSpell(data.results);
     
             fetch(API_ADDRESS + randomSpell.url)
-            .then(response => {
+            .then((response) => {
                 if(!response.ok) {
                     throw new Error(response.status);
                 } else {
                     return response.json();
                 }
             })
-            .then(data => {
+            .then((data) => {
                 let spellsClass = [];
                 let spellsComponents = [];
                 let spellsDesc = [];
@@ -77,11 +77,11 @@ $(function() {
     
                 $(".third").append($("<p>" + spellsDesc.join("<br><br>") + "</p>"));
             })
-            .catch(error => {
+            .catch((error) => {
                 $("main").append($("<h2>Something went wrong: " + error + "</h2>"));
             })
         })
-        .catch(error => {
+        .catch((error) => {
             $("main").append($("<h2>Something went wrong: " + error + "</h2>"));
         })
     }
