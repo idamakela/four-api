@@ -1,4 +1,28 @@
 $(function() {
+    /*
+        IDEA:
+        Array from all the api addresses
+        Random selector of api
+        Fetch the API data 
+        Random selector from the data.results
+            Maybe two parameters: class and level 
+            AKA get class and level data, generate random spell from the result 
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let API_ADDRESS = "https://api.open5e.com/spells";
     //max pages: /?page=17
 
