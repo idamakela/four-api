@@ -4,10 +4,12 @@ $(function() {
     const API_ADDRESS = "https://www.dnd5eapi.co";
 
     $(".restart").hide()
+    $(".spell-result").hide()
 
     $(".start").click(function() {
         $(".start").hide();
         $(".restart").show();
+        $(".spell-result").show()
         castSpell();
     });
 
@@ -42,16 +44,16 @@ $(function() {
                 }
                 
                 $(".name").text(data.name);
+                $(".first").append("<p>Level " + data.level + " " +  data.school.name  + " | " + spellsClass.join(", ") + "</p>");
     
                 if(data.ritual == true && data.concentration == true) {
-                    $(".zero").append("<p><i>Ritual spell</i> | <i>Concentration spell</i></p>")
+                    $(".first").append("<p><i>Ritual spell</i> | <i>Concentration spell</i></p>")
                 } else if(data.ritual == true) {
-                    $(".zero").append("<p><i>Ritual spell</i></p>")
+                    $(".first").append("<p><i>Ritual spell</i></p>")
                 } else if(data.concentration == true) {
-                    $(".zero").append("<p><i>Concentration spell</i></p>")
+                    $(".first").append("<p><i>Concentration spell</i></p>")
                 }
     
-                $(".first").append("<p>Level " + data.level + " " +  data.school.name  + " | " + spellsClass.join(", ") + "</p>");
                 $(".second").append("<p><b>Range: </b>" + data.range + "</p>");
                 $(".second").append("<p><b>Casting time: </b>" + data.casting_time + "</p>");
                 $(".second").append("<p><b>Duration: </b>" + data.duration + "</p>");
