@@ -1,6 +1,15 @@
 $(function() {
     const API_ADDRESS = "https://www.dnd5eapi.co";
 
+    /*
+        VG:
+        Make input field variables 
+        Make on click function
+        Fetch data according to the input variables 
+        Randomize a result
+    */
+
+
     $(".restart").hide();
     $(".spell-result").hide();
 
