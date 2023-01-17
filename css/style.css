@@ -5,6 +5,7 @@
     --light-accent-color: #bbc8cf;
 
     font-size: 16px;
+    --base-white-space: 4%;
 }
 
 * {
@@ -39,9 +40,21 @@ main {
     justify-content: center;
 }
 
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 6%;
+}
+
 .search-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     font-size: 1.2rem;
-    margin: 4%;
+    margin: 6% var(--base-white-space) 6% var(--base-white-space);
+    gap: 1%;
 }
 
 .search-field option,
@@ -59,9 +72,9 @@ button {
     cursor: pointer;
     font-family: monospace;
     font-size: 1.728rem;
-    margin: 8%;
-    padding: 1em 2em 1em 2em;
-    text-transform: capitalize;
+    margin: 3%;
+    padding: 1rem 2rem 1rem 2rem;
+    min-width: 220px;
 }
 
 button:hover {
@@ -70,7 +83,7 @@ button:hover {
 }
 
 .spell-result {
-    margin: 6% 4% 0 4%;
+    margin: 6% var(--base-white-space) 0 var(--base-white-space);
     max-width: 558px;
 }
 
@@ -79,22 +92,26 @@ button:hover {
 }
 
 .box {
-    margin: 4% 0 4% 0;
+    margin: var(--base-white-space) 0 var(--base-white-space) 0;
 }
 
 footer {
     background-color: var(--light-accent-color);
     font-size: 1.2rem;
-    padding: 4%;
+    padding: var(--base-white-space);
 }
 
 @media screen and (min-width: 991px) {
     header {
-        padding: 4%;
+        padding: var(--base-white-space);
+    }
+
+    .button-container {
+        flex-wrap: nowrap;
     }
 
     .spell-result {
-        margin: 4% 4% 0% 4%;
+        margin: var(--base-white-space) var(--base-white-space) 0% var(--base-white-space);
     }
     
     .box {

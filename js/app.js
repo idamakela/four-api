@@ -1,6 +1,4 @@
 $(function() {
-    //missing VG criterias 
-
     const API_ADDRESS = "https://www.dnd5eapi.co";
 
     $(".restart").hide();
