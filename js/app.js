@@ -1,31 +1,102 @@
 $(function() {
     const API_ADDRESS = "https://www.dnd5eapi.co";
+    const API_SPELL = "https://api.open5e.com/spells";
 
-    /*
-        VG:
-        Make input field variables 
-        Make on click function
-        Fetch data according to the input variables 
-        Randomize a result
-    */
-
-
-    $(".restart").hide();
     $(".spell-result").hide();
 
-    $(".start").click(function() {
-        $(".start").hide();
-        $(".restart").show();
-        $(".spell-result").show()
-        castSpell();
-    });
+    $(".randomize").click(function() {
 
-    $(".restart").click(function() {
+        //Make the select go to the first value
+        //$("#class").find("option:none").attr("selected", "selected");
+        //$("#level").find("option.none").attr("selected", "selected");
+
         $(".box").empty();
-        castSpell();
+        $(".spell-result").show()
+        castRandomSpell();
     });
 
-    function castSpell() {
+    $(".search").click(function() {
+        $(".box").empty();
+        $(".spell-result").show();
+        searchSpell();
+    });
+
+    function searchSpell() {
+        let classInput = $("#class").val();
+        let levelInput = $("#level").val();      
+        
+        if(classInput == undefined || levelInput == undefined) {
+            $(".name").text("Please select a class and level to proceed")
+        }
+
+        let apiArray = [
+            " ",
+            "/?page=2",
+            "/?page=3",
+            "/?page=4",
+            "/?page=5",
+            "/?page=6",
+            "/?page=7",
+            "/?page=8",
+            "/?page=9",
+            "/?page=10",
+            "/?page=11",
+            "/?page=12",
+            "/?page=13",
+            "/?page=14",
+            "/?page=15",
+            "/?page=16",
+            "/?page=17"
+        ];
+        let apiResults = [];
+
+        let apiAddress = randomGenerator(apiArray);
+
+        fetch(API_SPELL + apiAddress)
+        .then((response) => response.json())
+        .then((data) => {
+            
+            /*
+            If the result equal to no result from randomizer => generate new api address 
+                fetch the new api 
+            Make get result and append to a function
+                OBS! variabels! 
+            */
+
+
+            for(let i = 0; i <= data.results.length - 1; i++) {
+                if(data.results[i].dnd_class.toLowerCase().includes(classInput) && data.results[i].level_int == levelInput) {
+                    apiResults.push(data.results[i])
+                }
+            }
+
+            let randomSpecSpell = randomGenerator(apiResults);
+
+            $(".name").text(randomSpecSpell.name);
+            $(".first").append("<p>" + randomSpecSpell.level + " " +  randomSpecSpell.school  + " | " + randomSpecSpell.dnd_class + "</p>");
+            
+            if(randomSpecSpell.ritual.includes("yes") && randomSpecSpell.concentratrion.includes("yes")) {
+                $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>");
+            } else if(randomSpecSpell.ritual.includes("yes")) {
+                $(".second").append("<p><b>Ritual spell</b></p>");
+            } else if(randomSpecSpell.concentration.includes("yes")) {
+                $(".second").append("<p><b>Concentration spell</b></p>");
+            }
+
+            $(".second").append("<p><b>Range: </b>" + randomSpecSpell.range + "</p>");
+            $(".second").append("<p><b>Casting time: </b>" + randomSpecSpell.casting_time + "</p>");
+            $(".second").append("<p><b>Duration: </b>" + randomSpecSpell.duration + "</p>");
+            $(".second").append("<p><b>Components: </b>" + randomSpecSpell.components + "</p>");
+
+            if(randomSpecSpell.material != "") {
+                $(".second").append("<p><b>Materials: </b>" + randomSpecSpell.material + "</p>");
+            } 
+
+            $(".third").append($("<p>" + randomSpecSpell.desc + "</p>"));
+        })
+    }
+
+    function castRandomSpell() {
         fetch(API_ADDRESS + "/api/spells/")
         .then((response) => {
             if(!response.ok) {
@@ -35,7 +106,7 @@ $(function() {
             }
         })
         .then((data) => {
-            let randomSpell = generateRandomSpell(data.results);
+            let randomSpell = randomGenerator(data.results);
     
             fetch(API_ADDRESS + randomSpell.url)
             .then((response) => {
@@ -93,7 +164,7 @@ $(function() {
         })
     }
 
-    function generateRandomSpell(targetArray) {
+    function randomGenerator(targetArray) {
         return targetArray[Math.floor(Math.random() * targetArray.length)];
     }
 });
