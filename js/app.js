@@ -23,7 +23,7 @@ $(function() {
 
     function searchSpell() {
         let classInput = $("#class").val();
-        let levelInput = $("#level").val();      
+        let levelInput = $("#level").val();
         
         if(classInput == undefined || levelInput == undefined) {
             $(".name").text("Please select a class and level to proceed")
@@ -56,43 +56,91 @@ $(function() {
         .then((response) => response.json())
         .then((data) => {
             
+            //LOGIC
             /*
-            If the result equal to no result from randomizer => generate new api address 
-                fetch the new api 
-            Make get result and append to a function
-                OBS! variabels! 
+                Go through data.results array
+                Check if input exists in any of the index
+                    IF it does      => do everything under CODE
+                    ELSE (if not)   => generate new random page 
+                        Fetch data from new page 
+                        Go through data.results array 
+                        Check if input exists in any of the index
+                            IF it does      => do everything under CODE
+                            ELSE (if not)   => generate new random page 
+                                AND SO ON....
             */
 
+            //LOGICAL TEST
+            let testPage = null;
 
-            for(let i = 0; i <= data.results.length - 1; i++) {
-                if(data.results[i].dnd_class.toLowerCase().includes(classInput) && data.results[i].level_int == levelInput) {
-                    apiResults.push(data.results[i])
+            for(let x = 0; x <= data.results.length -1; x++) {
+                if(data.results[x].dnd_class.toLowerCase().includes(classInput) && data.results[x].level_int == levelInput) {
+                    testPage = true;
+                    console.log(testPage);
+                    break;
+                } else {
+                    testPage = false;
+                    console.log(testPage);
                 }
             }
 
-            let randomSpecSpell = randomGenerator(apiResults);
+            //RESULT OF ABOVE TEST
+            if(testPage == true) {
+                console.log("true is true");
+                appendSpell();
+            } else {
+                console.log("false is false");
+                
+                apiAddress = randomGenerator(apiArray);
+                console.log(apiAddress);
+                
+                appendSpell();
+                /*
+                fetch(API_SPELL + apiAddress)
+                .then((response) => response.json())
+                .then((data) => {
+                    appendSpell()
+                })*/
 
-            $(".name").text(randomSpecSpell.name);
-            $(".first").append("<p>" + randomSpecSpell.level + " " +  randomSpecSpell.school  + " | " + randomSpecSpell.dnd_class + "</p>");
-            
-            if(randomSpecSpell.ritual.includes("yes") && randomSpecSpell.concentratrion.includes("yes")) {
-                $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>");
-            } else if(randomSpecSpell.ritual.includes("yes")) {
-                $(".second").append("<p><b>Ritual spell</b></p>");
-            } else if(randomSpecSpell.concentration.includes("yes")) {
-                $(".second").append("<p><b>Concentration spell</b></p>");
             }
 
-            $(".second").append("<p><b>Range: </b>" + randomSpecSpell.range + "</p>");
-            $(".second").append("<p><b>Casting time: </b>" + randomSpecSpell.casting_time + "</p>");
-            $(".second").append("<p><b>Duration: </b>" + randomSpecSpell.duration + "</p>");
-            $(".second").append("<p><b>Components: </b>" + randomSpecSpell.components + "</p>");
+            
+            
+            //CODE
+            function appendSpell() {
+                for(let i = 0; i <= data.results.length - 1; i++) {
+                    if(data.results[i].dnd_class.toLowerCase().includes(classInput) && data.results[i].level_int == levelInput) {
+                        apiResults.push(data.results[i])
+                    } 
+                }
 
-            if(randomSpecSpell.material != "") {
-                $(".second").append("<p><b>Materials: </b>" + randomSpecSpell.material + "</p>");
-            } 
 
-            $(".third").append($("<p>" + randomSpecSpell.desc + "</p>"));
+    
+                let randomSpecSpell = randomGenerator(apiResults);
+                console.log(randomSpecSpell);
+    
+                $(".name").text(randomSpecSpell.name);
+                $(".first").append("<p>" + randomSpecSpell.level + " " +  randomSpecSpell.school  + " | " + randomSpecSpell.dnd_class + "</p>");
+                
+                if(randomSpecSpell.ritual.includes("yes") && randomSpecSpell.concentratrion.includes("yes")) {
+                    $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>");
+                } else if(randomSpecSpell.ritual.includes("yes")) {
+                    $(".second").append("<p><b>Ritual spell</b></p>");
+                } else if(randomSpecSpell.concentration.includes("yes")) {
+                    $(".second").append("<p><b>Concentration spell</b></p>");
+                }
+    
+                $(".second").append("<p><b>Range: </b>" + randomSpecSpell.range + "</p>");
+                $(".second").append("<p><b>Casting time: </b>" + randomSpecSpell.casting_time + "</p>");
+                $(".second").append("<p><b>Duration: </b>" + randomSpecSpell.duration + "</p>");
+                $(".second").append("<p><b>Components: </b>" + randomSpecSpell.components + "</p>");
+    
+                if(randomSpecSpell.material != "") {
+                    $(".second").append("<p><b>Materials: </b>" + randomSpecSpell.material + "</p>");
+                } 
+    
+                $(".third").append($("<p>" + randomSpecSpell.desc + "</p>"));
+            }
         })
     }
 
