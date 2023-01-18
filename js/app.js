@@ -2,6 +2,10 @@ $(function() {
     const API_ADDRESS = "https://www.dnd5eapi.co";
     const API_SPELL = "https://api.open5e.com/spells";
 
+    //LOGICAL TEST VARIABLES 
+    let result = false;
+    //
+
     $(".spell-result").hide();
 
     $(".randomize").click(function() {
@@ -21,6 +25,69 @@ $(function() {
         searchSpell();
     });
 
+
+
+
+    //LOGICAL TEST 2
+    let classInput = "sorcerer";
+    let levelInput = "2"
+    
+    //while loop has relation to if else in the function
+        //the result variable needs to be set in if else in function 
+    //while(result == false) {
+        testResult();
+        console.log("false");
+    //}
+    console.log("while loop is broken")
+
+    function testResult() {
+        //Can I have this outside the function??
+        //let classInput = $("#class").val();
+        //let levelInput = $("#level").val();
+        if(classInput == undefined || levelInput == undefined) {
+            $(".name").text("Please select a class and level to proceed")
+        }
+
+        let apiPages = [
+            "",
+            "/?page=2",
+            "/?page=3",
+            "/?page=4",
+            "/?page=5",
+            "/?page=6",
+            "/?page=7",
+            "/?page=8",
+            "/?page=9",
+            "/?page=10",
+            "/?page=11",
+            "/?page=12",
+            "/?page=13",
+            "/?page=14",
+            "/?page=15",
+            "/?page=16",
+            "/?page=17"
+        ];
+
+        let apiPage = randomGenerator(apiPages);
+
+        fetch(API_SPELL + apiPage)
+        .then((response) => response.json())
+        .then((data) => {
+            for(let x = 0; x <= data.results.length -1; x++) {
+                if(data.results[x].dnd_class.toLowerCase().includes(classInput) && data.results[x].level_int == levelInput) {
+                    result = true;
+                    break;
+                } else {
+                    result = false;
+                }
+            }
+        })
+    }
+
+
+
+
+
     function searchSpell() {
         let classInput = $("#class").val();
         let levelInput = $("#level").val();
@@ -29,7 +96,7 @@ $(function() {
             $(".name").text("Please select a class and level to proceed")
         }
 
-        let apiArray = [
+        let apiPages = [
             " ",
             "/?page=2",
             "/?page=3",
@@ -50,7 +117,7 @@ $(function() {
         ];
         let apiResults = [];
 
-        let apiAddress = randomGenerator(apiArray);
+        let apiAddress = randomGenerator(apiPages);
 
         fetch(API_SPELL + apiAddress)
         .then((response) => response.json())
@@ -91,7 +158,7 @@ $(function() {
             } else {
                 console.log("false is false");
                 
-                apiAddress = randomGenerator(apiArray);
+                apiAddress = randomGenerator(apiPages);
                 console.log(apiAddress);
                 
                 appendSpell();
@@ -103,22 +170,26 @@ $(function() {
                 })*/
 
             }
+            //
 
             
             
             //CODE
             function appendSpell() {
+
+                //generate random spell from input 
+                let apiResults = [];
+
                 for(let i = 0; i <= data.results.length - 1; i++) {
                     if(data.results[i].dnd_class.toLowerCase().includes(classInput) && data.results[i].level_int == levelInput) {
                         apiResults.push(data.results[i])
                     } 
                 }
-
-
     
                 let randomSpecSpell = randomGenerator(apiResults);
                 console.log(randomSpecSpell);
     
+                //append result
                 $(".name").text(randomSpecSpell.name);
                 $(".first").append("<p>" + randomSpecSpell.level + " " +  randomSpecSpell.school  + " | " + randomSpecSpell.dnd_class + "</p>");
                 
