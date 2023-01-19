@@ -30,56 +30,76 @@ $(function() {
 
     //LOGICAL TEST 2
     let classInput = "sorcerer";
-    let levelInput = "2"
+    let levelInput = 2;
     
     //while loop has relation to if else in the function
         //the result variable needs to be set in if else in function 
-    //while(result == false) {
-        testResult();
-        console.log("false");
-    //}
+    /*
+        q = 0
+    while(q <= 11) {
+        if(classInput == undefined || levelInput == undefined) {
+            $(".name").text("Please select a class and level to proceed")
+            q++;
+        } else {
+            testPageResult(API_SPELL);
+            console.log("false");
+            q++;
+        }
+    }
     console.log("while loop is broken")
+    */
+    const API_PAGES = [
+        "",
+        "/?page=2",
+        "/?page=3",
+        "/?page=4",
+        "/?page=5",
+        "/?page=6",
+        "/?page=7",
+        "/?page=8",
+        "/?page=9",
+        "/?page=10",
+        "/?page=11",
+        "/?page=12",
+        "/?page=13",
+        "/?page=14",
+        "/?page=15",
+        "/?page=16",
+        "/?page=17"
+    ];
 
-    function testResult() {
+   testPageResult(API_SPELL, API_PAGES);
+   
+   
+   function testPageResult(targetApi, targetApiPage) {
         //Can I have this outside the function??
         //let classInput = $("#class").val();
         //let levelInput = $("#level").val();
-        if(classInput == undefined || levelInput == undefined) {
-            $(".name").text("Please select a class and level to proceed")
-        }
 
-        let apiPages = [
-            "",
-            "/?page=2",
-            "/?page=3",
-            "/?page=4",
-            "/?page=5",
-            "/?page=6",
-            "/?page=7",
-            "/?page=8",
-            "/?page=9",
-            "/?page=10",
-            "/?page=11",
-            "/?page=12",
-            "/?page=13",
-            "/?page=14",
-            "/?page=15",
-            "/?page=16",
-            "/?page=17"
-        ];
 
-        let apiPage = randomGenerator(apiPages);
+        let apiPage = randomGenerator(targetApiPage);
+        let apiAddress = targetApi + apiPage;
 
-        fetch(API_SPELL + apiPage)
+
+        //prob something weird with fetch 
+        fetch(apiAddress)
         .then((response) => response.json())
         .then((data) => {
+            //issue with fetch according to chrome debugger
+            console.log(data);
+            
+            
+
             for(let x = 0; x <= data.results.length -1; x++) {
+
                 if(data.results[x].dnd_class.toLowerCase().includes(classInput) && data.results[x].level_int == levelInput) {
                     result = true;
-                    break;
+                    console.log(result);
                 } else {
                     result = false;
+                    console.log(result);
                 }
+            
             }
         })
     }
@@ -117,26 +137,13 @@ $(function() {
         ];
         let apiResults = [];
 
-        let apiAddress = randomGenerator(apiPages);
+        let apiPage = randomGenerator(apiPages);
+        let apiAddress = API_SPELL + apiPage;
 
-        fetch(API_SPELL + apiAddress)
+        fetch(apiAddress)
         .then((response) => response.json())
         .then((data) => {
             
-            //LOGIC
-            /*
-                Go through data.results array
-                Check if input exists in any of the index
-                    IF it does      => do everything under CODE
-                    ELSE (if not)   => generate new random page 
-                        Fetch data from new page 
-                        Go through data.results array 
-                        Check if input exists in any of the index
-                            IF it does      => do everything under CODE
-                            ELSE (if not)   => generate new random page 
-                                AND SO ON....
-            */
-
             //LOGICAL TEST
             let testPage = null;
 
@@ -158,19 +165,19 @@ $(function() {
             } else {
                 console.log("false is false");
                 
-                apiAddress = randomGenerator(apiPages);
-                console.log(apiAddress);
+                apiPage = randomGenerator(apiPages);
+                console.log(apiPage);
                 
                 appendSpell();
                 /*
-                fetch(API_SPELL + apiAddress)
+                fetch(API_SPELL + apiPage)
                 .then((response) => response.json())
                 .then((data) => {
                     appendSpell()
                 })*/
 
             }
-            //
+            //LOGICAL FUNCTION ABOVE
 
             
             
@@ -186,35 +193,36 @@ $(function() {
                     } 
                 }
     
-                let randomSpecSpell = randomGenerator(apiResults);
-                console.log(randomSpecSpell);
+                let spellResult = randomGenerator(apiResults);
+                console.log(spellResult);
     
                 //append result
-                $(".name").text(randomSpecSpell.name);
-                $(".first").append("<p>" + randomSpecSpell.level + " " +  randomSpecSpell.school  + " | " + randomSpecSpell.dnd_class + "</p>");
+                $(".name").text(spellResult.name);
+                $(".first").append("<p>" + spellResult.level + " " +  spellResult.school  + " | " + spellResult.dnd_class + "</p>");
                 
-                if(randomSpecSpell.ritual.includes("yes") && randomSpecSpell.concentratrion.includes("yes")) {
+                if(spellResult.ritual.includes("yes") && spellResult.concentratrion.includes("yes")) {
                     $(".second").append("<p><b>Ritual spell</b> | <b>Concentration spell</b></p>");
-                } else if(randomSpecSpell.ritual.includes("yes")) {
+                } else if(spellResult.ritual.includes("yes")) {
                     $(".second").append("<p><b>Ritual spell</b></p>");
-                } else if(randomSpecSpell.concentration.includes("yes")) {
+                } else if(spellResult.concentration.includes("yes")) {
                     $(".second").append("<p><b>Concentration spell</b></p>");
                 }
     
-                $(".second").append("<p><b>Range: </b>" + randomSpecSpell.range + "</p>");
-                $(".second").append("<p><b>Casting time: </b>" + randomSpecSpell.casting_time + "</p>");
-                $(".second").append("<p><b>Duration: </b>" + randomSpecSpell.duration + "</p>");
-                $(".second").append("<p><b>Components: </b>" + randomSpecSpell.components + "</p>");
+                $(".second").append("<p><b>Range: </b>" + spellResult.range + "</p>");
+                $(".second").append("<p><b>Casting time: </b>" + spellResult.casting_time + "</p>");
+                $(".second").append("<p><b>Duration: </b>" + spellResult.duration + "</p>");
+                $(".second").append("<p><b>Components: </b>" + spellResult.components + "</p>");
     
-                if(randomSpecSpell.material != "") {
-                    $(".second").append("<p><b>Materials: </b>" + randomSpecSpell.material + "</p>");
+                if(spellResult.material != "") {
+                    $(".second").append("<p><b>Materials: </b>" + spellResult.material + "</p>");
                 } 
     
-                $(".third").append($("<p>" + randomSpecSpell.desc + "</p>"));
+                $(".third").append($("<p>" + spellResult.desc + "</p>"));
             }
         })
     }
 
+    //FINISHED FUNCTION FOR RANDOMIZER
     function castRandomSpell() {
         fetch(API_ADDRESS + "/api/spells/")
         .then((response) => {
