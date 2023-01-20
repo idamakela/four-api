@@ -46,22 +46,17 @@ $(function() {
         console.log(levelInput)
     }
 
-    //LOGICAL TEST
-    testPageResult(API_SPELL, API_PAGES);
-    console.log(testVar);
-
+    //LOGICAL TEST NOT DONE
     function testPageResult(targetApi, targetApiPage) {
         let apiPage = randomGenerator(targetApiPage);
         let apiAddress = targetApi + apiPage;
-        console.log(classInput + " " + levelInput)
+        console.log(classInput + " " + levelInput);
+        console.log(apiAddress);
 
         //ERROR: could be fetch, seem like there is a ajax async set to false method 
         fetch(apiAddress)
         .then((response) => response.json())
         .then((data) => {
-            console.log(data);
-            console.log(data.results)
-
             //ERROR: boolean expression
             for(i = 0; i <= data.results.length - 1; i++) {
                 if(data.results[i].dnd_class.toLowerCase().includes(classInput) && data.results[i].level_int == levelInput) {
@@ -70,17 +65,75 @@ $(function() {
                     break;
                 } else {
                     console.log(testVar)
-
-                    continue;
                 }
-            }
-            
+            }           
         })
     }
 
 
+    //FETCH AS SYNCHRONOUS 
+    let urls = [
+        "https://api.open5e.com/spells",
+        "https://api.open5e.com/spells/?page=2",
+        "https://api.open5e.com/spells/?page=3",
+        "https://api.open5e.com/spells/?page=4",
+        "https://api.open5e.com/spells/?page=5",
+        "https://api.open5e.com/spells/?page=6",
+        "https://api.open5e.com/spells/?page=7",
+        "https://api.open5e.com/spells/?page=8",
+        "https://api.open5e.com/spells/?page=9",
+        "https://api.open5e.com/spells/?page=10",
+        "https://api.open5e.com/spells/?page=11",
+        "https://api.open5e.com/spells/?page=12",
+        "https://api.open5e.com/spells/?page=13",
+        "https://api.open5e.com/spells/?page=14",
+        "https://api.open5e.com/spells/?page=15",
+        "https://api.open5e.com/spells/?page=16",
+        "https://api.open5e.com/spells/?page=17"
+    ]
+
+    function getData(url) {
+        return fetch(url)
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            let dataArray = data.results
+            
+            return Promise.resolve(dataArray)
+        })
+    }
+
+    Promise.all(
+        urls.map(getData)
+    ).then((dataArray) => {
+        console.log(dataArray)                  //object
+        console.log(dataArray[0])               //object
+        console.log(dataArray[0][0])            //object
+        console.log(dataArray[0][0].dnd_class)  //string
+        console.log(dataArray[0][0].level_int)  //number
+
+        //readData(dataArray);
 
 
+    })
+    //ABOVE RETURNS ALL THE PAGES DATA.RESULTS IN AN ARRAY
+
+    //MANIPULATING THE ABOVE DATA
+    let spellsArray = [];
+    function readData(targetArray) {
+        //function to empty spellsArray first
+
+        for(let i = 0; i <= targetArray.length; i++) {
+            for(let j = 0; j <= targetArray[i].length - 1; j++) {
+                if(targetArray[i][j].dnd_class.toLowerCase().includes(classInput) && targetArray[i][j].level_int == levelInput) {
+                    spellsArray.push(targetArray[i][j]);
+                }
+            }
+        }
+        console.log(spellsArray)
+
+    }
 
 
 
