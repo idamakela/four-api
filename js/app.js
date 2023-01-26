@@ -105,7 +105,7 @@ $(function() {
     }
 
     Promise.all(
-        urls.map(getData)
+        urls.map(getData)                       //this returns an array of promises
     ).then((dataArray) => {
         console.log(dataArray)                  //object
         console.log(dataArray[0])               //object
