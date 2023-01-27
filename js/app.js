@@ -73,14 +73,14 @@ $(function() {
                     $(".second").append("<p><b>Materials: </b>" + data.material + "</p>");
                 } 
     
-                $(".third").append($("<p>" + spellsDesc.join("<br><br>") + "</p>"));
+                $(".third").append("<p>" + spellsDesc.join("<br><br>") + "</p>");
             })
             .catch((error) => {
-                $("main").append($("<h2>Something went wrong: " + error + "</h2>"));
+                $("main").append("<h2>Something went wrong: " + error + "</h2>");
             })
         })
         .catch((error) => {
-            $("main").append($("<h2>Something went wrong: " + error + "</h2>"));
+            $("main").append("<h2>Something went wrong: " + error + "</h2>");
         })
     }
 
