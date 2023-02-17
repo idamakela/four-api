@@ -30,7 +30,7 @@ $(function() {
     
             fetch(API_ADDRESS + randomSpell.url)
             .then((response) => {
-                if(!response.ok) {
+                if(!response.ok) { // With ifs, elses and loops have a space before the opening ( ... if (!repsonse.ok)
                     throw new Error(response.status);
                 } else {
                     return response.json();
